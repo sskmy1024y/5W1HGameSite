@@ -143,8 +143,10 @@ class Element():
             print('sqlite3.Error occurred:', e.args[0])
 
         connection.close()
-        return data
-
+        if data:
+            return data.toJSON()
+        else:
+            return {}
 
 
 class When(Element):
@@ -162,12 +164,14 @@ class Where(Element):
     def __init__(self, id, word):
         super().__init__(id, word)
 
+
 class Who(Element):
 
     table_name = "who_table"
 
     def __init__(self, id, name):
         super().__init__(id, name)
+
 
 class Why(Element):
 
@@ -176,6 +180,7 @@ class Why(Element):
     def __init__(self, id, word):
         super().__init__(id, word)
 
+
 class What(Element):
 
     table_name = "what_table"
@@ -183,10 +188,10 @@ class What(Element):
     def __init__(self, id, word):
         super().__init__(id, word)
 
+
 class How(Element):
 
     table_name = "how_table"
 
     def __init__(self, id, word):
         super().__init__(id, word)
-

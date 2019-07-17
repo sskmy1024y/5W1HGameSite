@@ -33,12 +33,23 @@ docker-compose up -d
 * response body sample:
   * success `200 OK`
   ```json
-  [
-    {
-      "id": 2,
-      "word": "hogefuga"
-    }
-  ]
+  {
+      "when": {
+          "id": 1,
+          "word": "hoge"
+      },
+      "where": {},
+      "who": {},
+      "what": {},
+      "why": {
+          "id": 1,
+          "word": "popopopon"
+      },
+      "how": {
+          "id": 3,
+          "word": "ponpon"
+      }
+  }
   ```
 
 #### Get random word
@@ -56,4 +67,36 @@ docker-compose up -d
     "id": 2,
     "word": "hogefuga"
   }
+  ```
+  * error `204 No Content` - 何も登録されていない
+  ```json
+  ```
+
+#### Register word
+  | method | endopoint               |
+  | :----: | ----------------------- |
+  |  POST  | `base_url/api/:element` |
+  
+要素ごとのワードを登録するエンドポイント
+`:element` は、`all` `when` `where` `what` `why` `who` `how` を指定する。
+
+* request body sample:
+```json
+{
+  "word": "hogehoge"
+}
+```
+
+* response body sample:
+  * success `200 OK`
+  ```json
+  {
+    "id": 3,
+    "word": "hogehoge"
+  }
+  ```
+
+  * error `409 Confrict` - 同じワードが登録済み
+  ```json
+  "409 Conflict"
   ```
