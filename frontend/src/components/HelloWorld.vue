@@ -22,17 +22,16 @@ export default {
   name: 'axios_data',
   data () {
     return {
-      info: null,
-      errored: false,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*'
-      }
+      info: {},
+      errored: false
     }
   },
   mounted () {
+    const headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Access-Control-Allow-Origin': '*'}
     axios
-      .get('http://localhost:8000/api/all', {headers: this.headers})
+      .get('http://localhost:8000/api/all', {headers: headers})
       .then((response) => {
         this.info = response
         console.log('RESPONSE RECEIVED: ', response)
