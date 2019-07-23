@@ -1,13 +1,14 @@
 # coding: utf-8
 
 from flask import Flask, request, make_response, redirect, abort
+from flask_cors import CORS
 from element import Element, When, Where, Why, What, Who, How
 import json
 
 Element.initAllDatabase()
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/api/all', methods=['GET', 'POST'])
 def registerAll():
