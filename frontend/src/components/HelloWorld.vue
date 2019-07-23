@@ -29,7 +29,8 @@ export default {
   mounted () {
     const headers = {
       'Content-Type': 'application/json;charset=UTF-8',
-      'Access-Control-Allow-Origin': '*'}
+      'Access-Control-Allow-Origin': '*'
+      }
     axios
       .get('http://localhost:8000/api/all', {headers: headers})
       .then((response) => {
