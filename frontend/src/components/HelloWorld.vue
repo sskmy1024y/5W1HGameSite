@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  name: "axios_data",
+  name: 'axios_data',
   data() {
     return {
       info: {},
@@ -25,11 +25,11 @@ export default {
   },
   mounted() {
     const headers = {
-      "Content-Type": "application/json;charset=UTF-8",
-      "Access-Control-Allow-Origin": "*"
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Access-Control-Allow-Origin': '*'
     };
     axios
-      .get("http://localhost:8000/api/all", { headers: headers })
+      .get('http://localhost:8000/api/all', { headers: headers })
       .then(response => {
         this.info = response;
         // eslint-disable-next-line
