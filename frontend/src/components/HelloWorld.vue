@@ -7,47 +7,47 @@
     </section>
 
     <section v-else>
-      <div class="axios_data">
-        {{ info }}:
-      </div>
-
+      <div class="axios_data">{{ info }}:</div>
     </section>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 
 export default {
-  name: 'axios_data',
-  data () {
+  name: "axios_data",
+  data() {
     return {
       info: {},
       errored: false
-    }
+    };
   },
-  mounted () {
+  mounted() {
     const headers = {
-      'Content-Type': 'application/json;charset=UTF-8',
-      'Access-Control-Allow-Origin': '*'
-      }
+      "Content-Type": "application/json;charset=UTF-8",
+      "Access-Control-Allow-Origin": "*"
+    };
     axios
-      .get('http://localhost:8000/api/all', {headers: headers})
-      .then((response) => {
-        this.info = response
-        console.log('RESPONSE RECEIVED: ', response)
+      .get("http://localhost:8000/api/all", { headers: headers })
+      .then(response => {
+        this.info = response;
+        // eslint-disable-next-line
+        console.log("RESPONSE RECEIVED: ", response);
       })
-      .catch((err) => {
-        console.log('AXIOS ERROR: ', err)
-        this.errored = true
-      })
+      .catch(err => {
+        // eslint-disable-next-line
+        console.log("AXIOS ERROR: ", err);
+        this.errored = true;
+      });
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
 ul {
