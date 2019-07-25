@@ -1,16 +1,24 @@
 <template>
-  <div id="welcome">
-    <h1>5W1HGameSite</h1>
-
+  <div class="generate-top">
+    <section>
+        <h1>生成</h1>
+    </section>
     <section v-if="errored">
       <p>Error</p>
     </section>
 
     <section v-else>
-      <div class="axios_data">
-        {{ info }}:
+      <div class="generate-sentence">
+        {{ info.data.who.word}}
+        {{ info.data.when.word}}
+        {{ info.data.where.word}}
+        {{ info.data.what.word}}
+        {{ info.data.why.word}}
+        {{ info.data.how.word}}
       </div>
-
+      <div class="top-link">
+        <router-link to="/">トップページに戻る</router-link>
+      </div>
     </section>
   </div>
 </template>
@@ -19,20 +27,22 @@
 import axios from 'axios'
 
 export default {
-  name: 'axios_data',
+  name: 'generate_sentence',
   data () {
     return {
       info: {},
       errored: false
     }
   },
+
   mounted () {
     const headers = {
       'Content-Type': 'application/json;charset=UTF-8',
       'Access-Control-Allow-Origin': '*'
-      }
+    }
+
     axios
-      .get('http://localhost:8000/api/all', {headers: headers})
+      .get('http://localhost:8000/api/all', headers)
       .then((response) => {
         this.info = response
         console.log('RESPONSE RECEIVED: ', response)
@@ -45,7 +55,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1, h2 {
   font-weight: normal;
