@@ -109,3 +109,4 @@ venv.bak/
 .envrc
 
 *.db
+.DS_Store
