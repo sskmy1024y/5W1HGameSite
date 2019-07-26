@@ -5,27 +5,27 @@
             <h2>登録</h2>
             <form v-on:submit.prevent>
                 <input type="text" v-model="newWho" placeholder="誰が">
-                <button v-on:click="addWho">
+                <button @click="addWord('who')">
                     Add Who
                 </button>
                 <input type="text" v-model="newWhen" placeholder="いつ">
-                <button v-on:click="addWhen">
+                <button @click="addWord('when')">
                     Add When
                 </button>
                 <input type="text" v-model="newWhere" placeholder="どこで">
-                <button v-on:click="addWhere">
+                <button @click="addWord('where')">
                     Add Where
                 </button>
                 <input type="text" v-model="newWhat" placeholder="なにを">
-                <button v-on:click="addWhat">
+                <button @click="addWord('what')">
                     Add What
                 </button>
                 <input type="text" v-model="newWhy" placeholder="なぜ">
-                <button v-on:click="addWhy">
+                <button @click="addWord('why')">
                     Add Why
                 </button>
                 <input type="text" v-model="newHow" placeholder="どのようにした">
-                <button v-on:click="addHow">
+                <button @click="addWord('how')">
                     Add How
                 </button>
             </form>
@@ -47,18 +47,12 @@ export default {
   name: 'register_word',
   data () {
     return {
-      newWho: null,
-      newWhen: null,
-      newWhere: null,
-      newWhat: null,
-      newWhy: null,
-      newHow: null,
-      Who: {},
-      When: {},
-      Where: {},
-      What: {},
-      Why: {},
-      How: {},
+      newWho: '',
+      newWhen: '',
+      newWhere: '',
+      newWhat: '',
+      newWhy: '',
+      newHow: '',
       errored: false,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -68,106 +62,56 @@ export default {
   },
 
   methods: {
-    addWho: function () {
-      if (this.newWho === '') return
-      var who = this.newWho
+    addWord: function (type) {
+      let word = ''
 
-      console.log(who)
+      switch (type) {
+        case 'who':
+          word = this.newWho
+          this.newWho = ''
+          break
+
+        case 'when':
+          word = this.newWhen
+          this.newWhen = ''
+          break
+
+        case 'where':
+          word = this.newWhere
+          this.newWhere = ''
+          break
+
+        case 'what':
+          word = this.newWhat
+          this.newWhat = ''
+          break
+
+        case 'why':
+          word = this.newWhy
+          this.newWhy = ''
+          break
+
+        case 'how':
+          word = this.newHow
+          this.newHow = ''
+          break
+      }
+
+      if (word === '') {
+        alert(`${type}に文章が指定されずに追加ボタンが押されました！エラーです！`)
+        return
+      }
+
       axios
-        .post('http://localhost:8000/api/who', {'word': who}, this.headers)
+        .post(`http://localhost:8000/api/${type}`, {'word': word}, this.headers)
         .then((response) => {
           console.log('OK', response)
+          alert(`「${word}」が${type}に登録されました`)
         })
         .catch((err) => {
           console.log('word not found', err)
+          alert(`「${word}」は既に${type}に登録されています！`)
         })
-
-      this.newWho = ''
-    },
-
-    addWhen: function () {
-      if (this.newWhen === '') return
-      var when = this.newWhen
-
-      console.log(when)
-      axios
-        .post('http://localhost:8000/api/when', {'word': when}, this.headers)
-        .then((response) => {
-          console.log('OK', response)
-        })
-        .catch((err) => {
-          console.log('word not found', err)
-        })
-
-      this.newWhen = ''
-    },
-
-    addWhere: function () {
-      if (this.newWhere === '') return
-      var where = this.newWhere
-
-      console.log(where)
-      axios
-        .post('http://localhost:8000/api/where', {'word': where}, this.headers)
-        .then((response) => {
-          console.log('OK', response)
-        })
-        .catch((err) => {
-          console.log('word not found', err)
-        })
-
-      this.newWhere = ''
-    },
-
-    addWhat: function () {
-      if (this.newWhat === '') return
-      var what = this.newWhat
-
-      console.log(what)
-      axios
-        .post('http://localhost:8000/api/what', {'word': what}, this.headers)
-        .then((response) => {
-          console.log('OK', response)
-        })
-        .catch((err) => {
-          console.log('word not found', err)
-        })
-
-      this.newWhat = ''
-    },
-
-    addWhy: function () {
-      if (this.newWhy === '') return
-      var why = this.newWhy
-
-      console.log(why)
-      axios
-        .post('http://localhost:8000/api/why', {'word': why}, this.headers)
-        .then((response) => {
-          console.log('OK', response)
-        })
-        .catch((err) => {
-          console.log('word not found', err)
-        })
-
-      this.newWhy = ''
-    },
-
-    addHow: function () {
-      if (this.newHow === '') return
-      var how = this.newHow
-
-      console.log(how)
-      axios
-        .post('http://localhost:8000/api/how', {'word': how}, this.headers)
-        .then((response) => {
-          console.log('OK', response)
-        })
-        .catch((err) => {
-          console.log('word not found', err)
-        })
-
-      this.newHow = ''
     }
   }
 }
