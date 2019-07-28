@@ -8,7 +8,11 @@
     "eslint:recommended"
   ],
   "rules": {
-    "no-extra-semi": "warn",
+    "semi": [
+      "off",
+      "never"
+    ],
+    "no-extra-semi": "error",
     "quotes": [
       "warn",
       "single"
