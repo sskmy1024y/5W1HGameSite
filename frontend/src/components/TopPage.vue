@@ -6,14 +6,16 @@
     </section>
     <section>
       <el-button type="primary" @click="$refs.registerDialog.dialog(true)">登録</el-button>
-      <el-button type="danger">生成</el-button>
+      <el-button type="danger" @click="$refs.generatorDialog.dialog(true)">生成</el-button>
     </section>
     <Register ref="registerDialog" />
+    <Generate ref="generatorDialog" />
   </div>
 </template>
 
 <script>
 import Register from './Register';
+import Generate from './Generates';
 export default {
   name: 'top_page',
   data() {
@@ -22,7 +24,8 @@ export default {
     };
   },
   components: {
-    Register
+    Register,
+    Generate
   }
 };
 </script>
