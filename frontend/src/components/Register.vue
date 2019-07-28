@@ -1,8 +1,8 @@
 <template>
   <el-dialog title="登録" :visible.sync="isDialogVisible" width="90%" center>
-    <span>キーワードを登録します</span>
-    <section>
-      <div class="register" style="text-align:center">
+    <section style="text-align:center">
+      <span>キーワードを登録します</span>
+      <div class="register">
         <el-form :inline="true" :model="form" label-width="100px">
           <el-form-item label="いつ">
             <el-input v-model="form.when" placeholder="昨日" style="width:300px"></el-input>
@@ -66,69 +66,61 @@ export default {
         why: '',
         how: ''
       },
-      newWho: '',
-      newWhen: '',
-      newWhere: '',
-      newWhat: '',
-      newWhy: '',
-      newHow: '',
       errored: false,
       isDialogVisible: false
     };
   },
   methods: {
     addWord: function(type) {
+      if (type === '') return false;
+
       const headers = {
         'Content-Type': 'application/json;charset=UTF-8',
         'Access-Control-Allow-Origin': '*'
       };
-      let word = '';
-      switch (type) {
-        case 'who':
-          word = this.newWho;
-          this.newWho = '';
-          break;
-
-        case 'when':
-          word = this.newWhen;
-          this.newWhen = '';
-          break;
-
-        case 'where':
-          word = this.newWhere;
-          this.newWhere = '';
-          break;
-
-        case 'what':
-          word = this.newWhat;
-          this.newWhat = '';
-          break;
-
-        case 'why':
-          word = this.newWhy;
-          this.newWhy = '';
-          break;
-
-        case 'how':
-          word = this.newHow;
-          this.newHow = '';
-          break;
-      }
+      const word = this.form[type];
 
       if (word === '') {
-        alert(
-          `${type}に文章が指定されずに追加ボタンが押されました！エラーです！`
-        );
+        this.$message({
+          message: `${type}に文章が指定されずに追加ボタンが押されました！エラーです！`,
+          type: 'error'
+        });
         return false;
       }
 
       axios
-        .post(`http://localhost:8000/api/${type}`, word, headers)
+        .post(
+          `http://${process.env.VUE_APP_API_HOST}/api/${type}`,
+          { word: word },
+          headers
+        )
         .then(() => {
-          alert(`「${word}」が${type}に登録されました`);
+          this.form[type] = '';
+          this.$message({
+            message: `「${word}」が${type}に登録されました`,
+            type: 'success'
+          });
         })
-        .catch(() => {
-          alert(`「${word}」は既に${type}に登録されています！`);
+        .catch(err => {
+          switch (err.response.status) {
+            case 409:
+              this.$message({
+                message: `「${word}」は既に${type}に登録されています！`,
+                type: 'error'
+              });
+              break;
+            case 500:
+              this.$message({
+                message: 'サーバー側でエラーが発生しました。',
+                type: 'error'
+              });
+              break;
+            default:
+              this.$message({
+                message: '不明なエラーが発生しました。',
+                type: 'error'
+              });
+          }
         });
     },
     dialog: function(bool) {

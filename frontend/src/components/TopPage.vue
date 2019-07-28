@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import Register from "./Register";
+import Register from './Register';
 export default {
-  name: "top_page",
+  name: 'top_page',
   data() {
     return {
-      msg: "Hello"
+      msg: 'Hello'
     };
   },
   components: {
