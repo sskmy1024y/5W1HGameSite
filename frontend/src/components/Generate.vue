@@ -43,35 +43,35 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 export default {
-  name: "generate_sentence",
+  name: 'generate_sentence',
   data() {
     return {
       contents: {
         who: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         },
         when: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         },
         where: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         },
         what: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         },
         why: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         },
         how: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         }
       },
       status: -2,
@@ -93,28 +93,28 @@ export default {
     restart: function() {
       this.contents = {
         who: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         },
         when: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         },
         where: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         },
         what: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         },
         why: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         },
         how: {
-          word: "",
-          status: "waiting"
+          word: '',
+          status: 'waiting'
         }
       };
       this.status = -3;
@@ -127,38 +127,38 @@ export default {
     },
 
     sequence: function() {
-      const words = ["when", "where", "who", "what", "how"];
+      const words = ['when', 'where', 'who', 'what', 'how'];
 
       words.forEach((type, index) => {
         setTimeout(() => {
           if (words.length - 1 > index)
-            this.contents[words[index + 1]].status = "process";
+            this.contents[words[index + 1]].status = 'process';
           this.getWord(type);
         }, 1500 * index);
       });
     },
 
     getWord: function(type) {
-      if (type === "") return false;
+      if (type === '') return false;
 
       const headers = {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Access-Control-Allow-Origin": "*"
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Access-Control-Allow-Origin': '*'
       };
 
       axios
         .get(`http://${process.env.VUE_APP_API_HOST}/api/${type}`, headers)
         .then(response => {
           if (response.data.word) this.contents[type].word = response.data.word;
-          this.contents[type].status = "success";
+          this.contents[type].status = 'success';
           this.status++;
         })
-        .catch(err => {
+        .catch(() => {
           this.$message({
-            message: "サーバーエラーが発生しました!",
-            type: "error"
+            message: 'サーバーエラーが発生しました!',
+            type: 'error'
           });
-          this.contents[type].status = "error";
+          this.contents[type].status = 'error';
           this.status++;
         });
     },
