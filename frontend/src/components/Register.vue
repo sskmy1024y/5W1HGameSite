@@ -1,52 +1,71 @@
 <template>
-<div class="register_word">
+  <el-dialog title="登録" :visible.sync="isDialogVisible" width="90%" center>
+    <span>キーワードを登録します</span>
     <section>
-        <div class="register">
-            <h2>登録</h2>
-            <form v-on:submit.prevent>
-                <input type="text" v-model="newWho" placeholder="誰が">
-                <button @click="addWord('who')">
-                    Add Who
-                </button>
-                <input type="text" v-model="newWhen" placeholder="いつ">
-                <button @click="addWord('when')">
-                    Add When
-                </button>
-                <input type="text" v-model="newWhere" placeholder="どこで">
-                <button @click="addWord('where')">
-                    Add Where
-                </button>
-                <input type="text" v-model="newWhat" placeholder="なにを">
-                <button @click="addWord('what')">
-                    Add What
-                </button>
-                <input type="text" v-model="newWhy" placeholder="なぜ">
-                <button @click="addWord('why')">
-                    Add Why
-                </button>
-                <input type="text" v-model="newHow" placeholder="どのようにした">
-                <button @click="addWord('how')">
-                    Add How
-                </button>
-            </form>
-        </div>
-    </section>
+      <div class="register" style="text-align:center">
+        <el-form :inline="true" :model="form" label-width="100px">
+          <el-form-item label="いつ">
+            <el-input v-model="form.when" placeholder="昨日" style="width:300px"></el-input>
+          </el-form-item>
+          <el-button type="primary" @click="addWord('when')">追加</el-button>
+        </el-form>
 
-    <section>
-        <div class="page-link">
-            <router-link to="/">トップページに戻る</router-link>
-        </div>
+        <el-form :inline="true" :model="form" label-width="100px">
+          <el-form-item label="どこで">
+            <el-input v-model="form.where" placeholder="工科大で" style="width:300px"></el-input>
+          </el-form-item>
+          <el-button type="primary" @click="addWord('where')">追加</el-button>
+        </el-form>
+
+        <el-form :inline="true" :model="form" label-width="100px">
+          <el-form-item label="誰が">
+            <el-input v-model="form.who" placeholder="ポプ子とピピ美が" style="width:300px"></el-input>
+          </el-form-item>
+          <el-button type="primary" @click="addWord('who')">追加</el-button>
+        </el-form>
+
+        <el-form :inline="true" :model="form" label-width="100px">
+          <el-form-item label="何を">
+            <el-input v-model="form.what" placeholder="竹書房を" style="width:300px"></el-input>
+          </el-form-item>
+          <el-button type="primary" @click="addWord('what')">追加</el-button>
+        </el-form>
+
+        <el-form :inline="true" :model="form" label-width="100px">
+          <el-form-item label="なぜ">
+            <el-input v-model="form.why" placeholder="気紛れで" style="width:300px"></el-input>
+          </el-form-item>
+          <el-button type="primary" @click="addWord('why')">追加</el-button>
+        </el-form>
+
+        <el-form :inline="true" :model="form" label-width="100px">
+          <el-form-item label="どうした">
+            <el-input v-model="form.how" placeholder="土に埋めた" style="width:300px"></el-input>
+          </el-form-item>
+          <el-button type="primary" @click="addWord('how')">追加</el-button>
+        </el-form>
+      </div>
     </section>
-  </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="isDialogVisible = false">閉じる</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
-import axios from 'axios'
-
+import axios from 'axios';
 export default {
   name: 'register_word',
-  data () {
+  data() {
     return {
+      form: {
+        who: '',
+        when: '',
+        where: '',
+        whet: '',
+        why: '',
+        how: ''
+      },
       newWho: '',
       newWhen: '',
       newWhere: '',
@@ -54,71 +73,74 @@ export default {
       newWhy: '',
       newHow: '',
       errored: false,
-      headers: {
+      isDialogVisible: false
+    };
+  },
+  methods: {
+    addWord: function(type) {
+      const headers = {
         'Content-Type': 'application/json;charset=UTF-8',
         'Access-Control-Allow-Origin': '*'
-      }
-    }
-  },
-
-  methods: {
-    addWord: function (type) {
-      let word = ''
-
+      };
+      let word = '';
       switch (type) {
         case 'who':
-          word = this.newWho
-          this.newWho = ''
-          break
+          word = this.newWho;
+          this.newWho = '';
+          break;
 
         case 'when':
-          word = this.newWhen
-          this.newWhen = ''
-          break
+          word = this.newWhen;
+          this.newWhen = '';
+          break;
 
         case 'where':
-          word = this.newWhere
-          this.newWhere = ''
-          break
+          word = this.newWhere;
+          this.newWhere = '';
+          break;
 
         case 'what':
-          word = this.newWhat
-          this.newWhat = ''
-          break
+          word = this.newWhat;
+          this.newWhat = '';
+          break;
 
         case 'why':
-          word = this.newWhy
-          this.newWhy = ''
-          break
+          word = this.newWhy;
+          this.newWhy = '';
+          break;
 
         case 'how':
-          word = this.newHow
-          this.newHow = ''
-          break
+          word = this.newHow;
+          this.newHow = '';
+          break;
       }
 
       if (word === '') {
-        alert(`${type}に文章が指定されずに追加ボタンが押されました！エラーです！`)
-        return
+        alert(
+          `${type}に文章が指定されずに追加ボタンが押されました！エラーです！`
+        );
+        return false;
       }
 
       axios
-        .post(`http://localhost:8000/api/${type}`, {'word': word}, this.headers)
-        .then((response) => {
-          console.log('OK', response)
-          alert(`「${word}」が${type}に登録されました`)
+        .post(`http://localhost:8000/api/${type}`, word, headers)
+        .then(() => {
+          alert(`「${word}」が${type}に登録されました`);
         })
-        .catch((err) => {
-          console.log('word not found', err)
-          alert(`「${word}」は既に${type}に登録されています！`)
-        })
+        .catch(() => {
+          alert(`「${word}」は既に${type}に登録されています！`);
+        });
+    },
+    dialog: function(bool) {
+      this.isDialogVisible = bool;
     }
   }
-}
+};
 </script>
 
 <style scoped>
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
 ul {

@@ -1,7 +1,7 @@
 <template>
   <div class="generate-top">
     <section>
-        <h1>生成</h1>
+      <h1>生成</h1>
     </section>
     <section v-if="errored">
       <p>Error</p>
@@ -25,17 +25,16 @@
 
 <script>
 import axios from 'axios';
-
 export default {
   name: 'generate_sentence',
-  data () {
+  data() {
     return {
       info: {},
       errored: false
-    };
+    }
   },
 
-  mounted () {
+  mounted() {
     const headers = {
       'Content-Type': 'application/json;charset=UTF-8',
       'Access-Control-Allow-Origin': '*'
@@ -43,21 +42,20 @@ export default {
 
     axios
       .get('http://localhost:8000/api/all', headers)
-      .then((response) => {
+      .then(response => {
         this.info = response
         console.log('RESPONSE RECEIVED: ', response)
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('AXIOS ERROR: ', err)
         this.errored = true
       })
       .catch(err => {
-        // eslint-disable-next-line
-        console.log("AXIOS ERROR: ", err);
-        this.errored = true;
-      });
+        console.log('AXIOS ERROR: ', err)
+        this.errored = true
+      })
   }
-};
+}
 </script>
 
 <style scoped>
