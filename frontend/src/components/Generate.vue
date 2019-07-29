@@ -1,61 +1,170 @@
 <template>
-  <div class="generate-top">
-    <section>
-        <h1>生成</h1>
-    </section>
-    <section v-if="errored">
-      <p>Error</p>
-    </section>
+  <el-dialog
+    title="イツドコゲーム！"
+    :visible.sync="isDialogVisible"
+    width="90%"
+    center
+    :close-on-click-modal="false"
+    :show-close="false"
+  >
+    <section style="text-align:center">
+      <span>みんなの登録したキーワードから、文章が作られるよ！</span>
+      <div class="contents">
+        <el-button
+          v-if="-3 < status && status < 0"
+          type="primary"
+          :loading="status==-1"
+          @click="start"
+        >スタート！</el-button>
 
-    <section v-else>
-      <div class="generate-sentence">
-        {{ info.data.who.word}}
-        {{ info.data.when.word}}
-        {{ info.data.where.word}}
-        {{ info.data.what.word}}
-        {{ info.data.why.word}}
-        {{ info.data.how.word}}
-      </div>
-      <div class="top-link">
-        <router-link to="/">トップページに戻る</router-link>
+        <el-steps v-if="status >= 0" :active="status" align-center>
+          <el-step title="いつ" :description="contents.when.word" :status="contents.when.status"></el-step>
+          <el-step title="どこで" :description="contents.where.word" :status="contents.where.status"></el-step>
+          <el-step title="だれが" :description="contents.who.word" :status="contents.who.status"></el-step>
+          <el-step title="なにを" :description="contents.what.word" :status="contents.what.status"></el-step>
+          <el-step title="どうした" :description="contents.how.word" :status="contents.how.status"></el-step>
+        </el-steps>
+
+        <h1
+          class="result"
+        >{{`${contents.when.word}${contents.where.word}${contents.who.word}${contents.what.word}${contents.how.word}`}}</h1>
       </div>
     </section>
-  </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button v-if="status == 5 || status == -2" @click="isDialogVisible = false">閉じる</el-button>
+      <el-button
+        type="primary"
+        v-if="status > 4 || status == -3"
+        :loading="status==-3"
+        @click="restart"
+      >もう一度</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
 import axios from 'axios';
-
 export default {
   name: 'generate_sentence',
-  data () {
+  data() {
     return {
-      info: {},
-      errored: false
+      contents: {
+        who: {
+          word: '',
+          status: 'waiting'
+        },
+        when: {
+          word: '',
+          status: 'waiting'
+        },
+        where: {
+          word: '',
+          status: 'waiting'
+        },
+        what: {
+          word: '',
+          status: 'waiting'
+        },
+        why: {
+          word: '',
+          status: 'waiting'
+        },
+        how: {
+          word: '',
+          status: 'waiting'
+        }
+      },
+      status: -2,
+      errored: false,
+      isDialogVisible: false
     };
   },
+  methods: {
+    start: function() {
+      this.status = -1;
+      setTimeout(() => {
+        this.status = 0;
+        setTimeout(() => {
+          this.sequence();
+        }, 1500);
+      }, 1000);
+    },
 
-  mounted () {
-    const headers = {
-      'Content-Type': 'application/json;charset=UTF-8',
-      'Access-Control-Allow-Origin': '*'
-    }
+    restart: function() {
+      this.contents = {
+        who: {
+          word: '',
+          status: 'waiting'
+        },
+        when: {
+          word: '',
+          status: 'waiting'
+        },
+        where: {
+          word: '',
+          status: 'waiting'
+        },
+        what: {
+          word: '',
+          status: 'waiting'
+        },
+        why: {
+          word: '',
+          status: 'waiting'
+        },
+        how: {
+          word: '',
+          status: 'waiting'
+        }
+      };
+      this.status = -3;
+      setTimeout(() => {
+        this.status = 0;
+        setTimeout(() => {
+          this.sequence();
+        }, 1500);
+      }, 1000);
+    },
 
-    axios
-      .get('http://localhost:8000/api/all', headers)
-      .then((response) => {
-        this.info = response
-        console.log('RESPONSE RECEIVED: ', response)
-      })
-      .catch((err) => {
-        console.log('AXIOS ERROR: ', err)
-        this.errored = true
-      })
-      .catch(err => {
-        // eslint-disable-next-line
-        console.log("AXIOS ERROR: ", err);
-        this.errored = true;
+    sequence: function() {
+      const words = ['when', 'where', 'who', 'what', 'how'];
+
+      words.forEach((type, index) => {
+        setTimeout(() => {
+          if (words.length - 1 > index)
+            this.contents[words[index + 1]].status = 'process';
+          this.getWord(type);
+        }, 1500 * index);
       });
+    },
+
+    getWord: function(type) {
+      if (type === '') return false;
+
+      const headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Access-Control-Allow-Origin': '*'
+      };
+
+      axios
+        .get(`http://${process.env.VUE_APP_API_HOST}/api/${type}`, headers)
+        .then(response => {
+          if (response.data.word) this.contents[type].word = response.data.word;
+          this.contents[type].status = 'success';
+          this.status++;
+        })
+        .catch(() => {
+          this.$message({
+            message: 'サーバーエラーが発生しました!',
+            type: 'error'
+          });
+          this.contents[type].status = 'error';
+          this.status++;
+        });
+    },
+    dialog: function(bool) {
+      this.isDialogVisible = bool;
+    }
   }
 };
 </script>
@@ -75,5 +184,15 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.contents {
+  margin: 30px;
+}
+
+.result {
+  font-weight: bold;
+  margin-top: 60px;
+  font-size: 30px;
 }
 </style>
