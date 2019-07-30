@@ -9,6 +9,7 @@ services:
       - ./webroot:/var/www/html
     links:
       - backend:backend
+
   backend:
     image: "python:3.6-alpine"
     command: /bin/sh -xcv "pip install -r requirements.txt && FLASK_APP=backend/app.py FLASK_ENV=development flask run --reload --debugger -h 0.0.0.0 -p 8888"
@@ -17,3 +18,11 @@ services:
     working_dir: /opt/backend
     ports:
       - 8888:8888
+
+  frontend:
+    build: frontend
+    volumes:
+      - ./frontend:/app
+    command: yarn dev
+    ports:
+      - "8080:8080"
