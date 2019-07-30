@@ -4,9 +4,7 @@ FROM node:10.13-alpine
 ENV APP_ROOT /app
 WORKDIR $APP_ROOT
 
-RUN apk update && \
-    apk add git && \
-    npm install -g npm && \
+RUN npm install -g npm && \
     npm install -g yarn && \
     yarn global add vue-cli
 
