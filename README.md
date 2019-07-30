@@ -9,14 +9,24 @@
 ## Try
 
 ```
+docker-compose build 
 docker-compose up -d
 
-# Open http://localhost:8000 in browser
-
+# Open http://localhost:8080 in browser
 ```
 
+## 外部公開
 
-# API
+> もっといい方法があるはず
+
+```bash
+$ ngrok http 8000
+
+# .envを、表示されたホスト名に書き換える
+$ docker-compose up -d
+```
+
+## API
 
 `base_url` は適宜変えてください。
 > localで実行する場合は、`localhost:8000`

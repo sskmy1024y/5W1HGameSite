@@ -9,6 +9,7 @@ services:
       - ./webroot:/var/www/html
     links:
       - backend:backend
+      - app:app
 
   backend:
     image: "python:3.6-alpine"
@@ -16,13 +17,11 @@ services:
     volumes:
       - ./:/opt/backend
     working_dir: /opt/backend
-    ports:
-      - 8888:8888
 
-  frontend:
+  app:
     build: frontend
+    env_file: .env
     volumes:
       - ./frontend:/app
+      - "/app/node_modules"
     command: yarn dev
-    ports:
-      - "8080:8080"
