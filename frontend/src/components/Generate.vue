@@ -141,7 +141,7 @@ export default {
       };
 
       axios
-        .get(`https://${process.env.VUE_APP_API_HOST}/api/${type}`, headers)
+        .get(`${process.env.VUE_APP_API_HOST}/api/${type}`, headers)
         .then(response => {
           if (response.data.word) this.contents[type].word = response.data.word;
           this.contents[type].status = 'success';

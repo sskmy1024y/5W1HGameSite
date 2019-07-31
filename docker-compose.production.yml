@@ -7,6 +7,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./webroot:/var/www/html
+      - ./frontend/dist:/front
     links:
       - backend:backend
       - app:app
@@ -17,13 +18,3 @@ services:
     volumes:
       - ./:/opt/backend
     working_dir: /opt/backend
-    port: 8888:8888
-
-  app:
-    build: frontend
-    env_file: ./frontend/.env
-    volumes:
-      - ./frontend:/app
-      - "/app/node_modules"
-    command: yarn dev
-    port: 8080:8080

@@ -8,11 +8,17 @@
 
 ## Try
 
+```bash
+$ cp .env.template .env
 ```
-docker-compose build 
-docker-compose up -d
 
-# Open http://localhost:8080 in browser
+`.env` にバックエンドAPIのホスト名を設定。
+
+```bash
+$ docker-compose build 
+$ docker-compose up -d
+
+# Open http://localhost:8000 in browser
 ```
 
 ## 外部公開
@@ -23,7 +29,8 @@ docker-compose up -d
 $ ngrok http 8000
 
 # .envを、表示されたホスト名に書き換える
-$ docker-compose up -d
+$ docker-compsoe run app yarn build
+$ docker-compose -f docker-compose.production.yml up -d
 ```
 
 ## API

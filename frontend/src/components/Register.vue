@@ -84,18 +84,18 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 export default {
-  name: "register_word",
+  name: 'register_word',
   data() {
     return {
       form: {
-        who: "",
-        when: "",
-        where: "",
-        what: "",
-        why: "",
-        how: ""
+        who: '',
+        when: '',
+        where: '',
+        what: '',
+        why: '',
+        how: ''
       },
       errored: false,
       isDialogVisible: false
@@ -103,33 +103,33 @@ export default {
   },
   methods: {
     addWord: function(type) {
-      if (type === "") return false;
+      if (type === '') return false;
 
       const headers = {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Access-Control-Allow-Origin": "*"
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Access-Control-Allow-Origin': '*'
       };
       const word = this.form[type];
 
-      if (word === "") {
+      if (word === '') {
         this.$message({
           message: `${type}に文章が指定されずに追加ボタンが押されました！エラーです！`,
-          type: "error"
+          type: 'error'
         });
         return false;
       }
 
       axios
         .post(
-          `https://${process.env.VUE_APP_API_HOST}/api/${type}`,
+          `${process.env.VUE_APP_API_HOST}/api/${type}`,
           { word: word },
           headers
         )
         .then(() => {
-          this.form[type] = "";
+          this.form[type] = '';
           this.$message({
             message: `「${word}」が${type}に登録されました`,
-            type: "success"
+            type: 'success'
           });
         })
         .catch(err => {
@@ -137,19 +137,19 @@ export default {
             case 409:
               this.$message({
                 message: `「${word}」は既に${type}に登録されています！`,
-                type: "error"
+                type: 'error'
               });
               break;
             case 500:
               this.$message({
-                message: "サーバー側でエラーが発生しました。",
-                type: "error"
+                message: 'サーバー側でエラーが発生しました。',
+                type: 'error'
               });
               break;
             default:
               this.$message({
-                message: "不明なエラーが発生しました。",
-                type: "error"
+                message: '不明なエラーが発生しました。',
+                type: 'error'
               });
           }
         });
