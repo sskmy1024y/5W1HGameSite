@@ -120,26 +120,20 @@ export default {
       this.status = -3;
       setTimeout(() => {
         this.status = 0;
-        setTimeout(() => {
-          this.sequence();
-        }, 1500);
+        this.sequence();
       }, 1000);
     },
 
     sequence: function() {
-      const words = ['when', 'where', 'who', 'what', 'how'];
-
-      words.forEach((type, index) => {
-        setTimeout(() => {
-          if (words.length - 1 > index)
-            this.contents[words[index + 1]].status = 'process';
-          this.getWord(type);
-        }, 1500 * index);
-      });
+      this.getWord(0);
     },
 
-    getWord: function(type) {
-      if (type === '') return false;
+    getWord: function(index) {
+      const words = ['when', 'where', 'who', 'what', 'how'];
+      if (index < -1 || index >= words.length) return false;
+
+      const type = words[index];
+      this.contents[type].status = 'process';
 
       const headers = {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -152,6 +146,9 @@ export default {
           if (response.data.word) this.contents[type].word = response.data.word;
           this.contents[type].status = 'success';
           this.status++;
+          setTimeout(() => {
+            if (words.length - 1 > index) this.getWord(index + 1);
+          }, 1200);
         })
         .catch(() => {
           this.$message({
