@@ -121,7 +121,7 @@ export default {
 
       axios
         .post(
-          `http://${process.env.VUE_APP_API_HOST}/api/${type}`,
+          `${process.env.VUE_APP_API_HOST}/api/${type}`,
           { word: word },
           headers
         )

@@ -2,7 +2,7 @@
   <div id="welcome">
     <div class="head-line"></div>
     <section>
-      <img :src="imgSrc" alt="title image" />
+      <img :src="imgSrc" width="100%" alt="title image" />
     </section>
     <section>
       <el-button type="primary" @click="$refs.registerDialog.dialog(true)">登録</el-button>
